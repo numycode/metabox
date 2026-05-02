@@ -1,80 +1,89 @@
-<style>
-    body {
-        background: #0d142f;
-        color: white;
-    }
-    .green {
-        color: #00ff7f;
-    }
-    #pool_show {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-    }
-    .tx_box{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: rgb(0, 0, 0);
-        font-size: 10px;
-        font-weight: bold;
-        border-radius: 4px;
-    }
-</style>
-<input type="text" id="node" value="https://monero.openinternet.io"  style="width:300px;">
-<script>
-    node_url = document.getElementById("node").value;
-    let status = {};
-    let pool = {};
-    function status_get() {
-        fetch(node_url + "/get_info")
-        .then(res => res.json())
-        .then(data => {
-            status = data;
-            document.getElementById("height").innerHTML = "Height: <span class='green'>" + status.height + "</span>";
-            document.getElementById("last_hash").innerHTML = "Last block: <span class='green'>" + status.top_block_hash + "</span>";
-            document.getElementById("hash_rate").innerHTML ="Hash Rate (Gh/s): <span class='green'>" +(status.difficulty / 120 / 1e9) +"</span>";
-            document.getElementById("difficulty").innerHTML ="Difficulty: <span class='green'>" + status.difficulty + "</span>";
-            document.getElementById("database_size").innerHTML ="Database size: <span class='green'>" +(status.database_size / 1e9) +"GB</span>";
-            document.getElementById("meta_pool").innerHTML ="Meta pool (<span class='green'>" +status.tx_pool_size +"</span>):";
-        })
-        .catch(err => {
-            console.error(err);
-        });
-    }
-    async function pool_get() {
-        try {
-            const container = document.getElementById("pool_show");
-            const res = await fetch(node_url + "/get_transaction_pool");
-            const data = await res.json();
-            const txs = data.transactions || [];
-            container.innerHTML = "";
-            txs.forEach(tx => {
-                const weight = tx.weight || 1;
-                const side = Math.sqrt(weight) * 1;
-                const box = document.createElement("div");
-                box.className = "tx_box";
-                box.style.width = side + "px";
-                box.style.height = side + "px";
-                const intensity = Math.min(255, weight / 50);
-                box.style.background = `rgb(${intensity}, 80, 200)`;
-                box.textContent = weight;
-                container.appendChild(box);
-            });
-        } catch (err) {
-            console.error(err);
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">   
+    <title>Metabox</title>   
+    <meta name="viewport" content="width=device-width,initial-scale=1">   
+    <meta name="description" content="Metapool viewer for XMR and BTC">
+    <!--link rel="icon" href="favicon.png"-->
+    <style>
+        body {
+            background: #0d142f;
+            color: white;
         }
-    }
-    setInterval(status_get, 500);
-    setInterval(pool_get, 500);
-</script>
-<div id="height">height</div>
-<div id="last_hash">last_hash</div>
-<div id="hash_rate">hash_rate</div>
-<div id="difficulty">difficulty</div>
-<div id="database_size">database_size</div>
+        .green {
+            color: #00ff7f;
+        }
+        #pool_show {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .tx_box{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgb(0, 0, 0);
+            font-size: 10px;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="node" value="https://monero.openinternet.io"  style="width:300px;">
+    <script>
+        node_url = document.getElementById("node").value;
+        let status = {};
+        let pool = {};
+        function status_get() {
+            fetch(node_url + "/get_info")
+            .then(res => res.json())
+            .then(data => {
+                status = data;
+                document.getElementById("height").innerHTML = "Height: <span class='green'>" + status.height + "</span>";
+                document.getElementById("last_hash").innerHTML = "Last block: <span class='green'>" + status.top_block_hash + "</span>";
+                document.getElementById("hash_rate").innerHTML ="Hash Rate (Gh/s): <span class='green'>" +(status.difficulty / 120 / 1e9) +"</span>";
+                document.getElementById("difficulty").innerHTML ="Difficulty: <span class='green'>" + status.difficulty + "</span>";
+                document.getElementById("database_size").innerHTML ="Database size: <span class='green'>" +(status.database_size / 1e9) +"GB</span>";
+                document.getElementById("meta_pool").innerHTML ="Meta pool (<span class='green'>" +status.tx_pool_size +"</span>):";
+            })
+            .catch(err => {
+                console.error(err);
+            });
+        }
+        async function pool_get() {
+            try {
+                const container = document.getElementById("pool_show");
+                const res = await fetch(node_url + "/get_transaction_pool");
+                const data = await res.json();
+                const txs = data.transactions || [];
+                container.innerHTML = "";
+                txs.forEach(tx => {
+                    const weight = tx.weight || 1;
+                    const side = Math.sqrt(weight) * 1;
+                    const box = document.createElement("div");
+                    box.className = "tx_box";
+                    box.style.width = side + "px";
+                    box.style.height = side + "px";
+                    const intensity = Math.min(255, weight / 50);
+                    box.style.background = `rgb(${intensity}, 80, 200)`;
+                    box.textContent = weight;
+                    container.appendChild(box);
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        setInterval(status_get, 500);
+        setInterval(pool_get, 500);
+    </script>
+    <div id="height">height</div>
+    <div id="last_hash">last_hash</div>
+    <div id="hash_rate">hash_rate</div>
+    <div id="difficulty">difficulty</div>
+    <div id="database_size">database_size</div>
 
-<div id="meta_pool">meta_pool</div>
-<div id="pool_show"></div>
-
-
+    <div id="meta_pool">meta_pool</div>
+    <div id="pool_show"></div>
+</body>

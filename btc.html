@@ -1,82 +1,93 @@
-<style>
-    body {
-        background: #0d142f;
-        color: white;
-    }
-    .green {
-        color: #00ff7f;
-    }
-    #pool_show {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1px;
-    }
-    .tx_box{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: rgb(0, 0, 0);
-        font-size: 10px;
-        font-weight: bold;
-    }
-</style>
-<input type="text" id="node" value="https://bitcoin-rpc.publicnode.com"  style="width:300px;">
-<script>
-    node_url = document.getElementById("node").value;
-    let btc_status = {};
-    let btc_meta = {};
-    function status_get() {
-        fetch(node_url, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({jsonrpc: "2.0", id: 1, method: "getblockchaininfo", params: []})})
-        .then(res => res.json())
-        .then(data => {
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">   
+    <title>Metabox</title>   
+    <meta name="viewport" content="width=device-width,initial-scale=1">   
+    <meta name="description" content="Metapool viewer for XMR and BTC">
+    <link rel="icon" href="favicon.png">
+    <style>
+        body {
+            background: #0d142f;
+            color: white;
+        }
+        .green {
+            color: #00ff7f;
+        }
+        #pool_show {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1px;
+        }
+        .tx_box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgb(0, 0, 0);
+            font-size: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="node" value="https://bitcoin-rpc.publicnode.com"  style="width:300px;">
+    <script>
+        node_url = document.getElementById("node").value;
+        let btc_status = {};
+        let btc_meta = {};
+        function status_get() {
+            fetch(node_url, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({jsonrpc: "2.0", id: 1, method: "getblockchaininfo", params: []})})
+            .then(res => res.json())
+            .then(data => {
                 btc_status = data.result;
                 document.getElementById("height").innerHTML = "Height: <span class='green'>" + btc_status.blocks + "</span>";
                 document.getElementById("last_hash").innerHTML = "Last block: <span class='green'>" + btc_status.bestblockhash + "</span>";
                 document.getElementById("hash_rate").innerHTML ="Hash Rate (Ph/s): <span class='green'>" + (btc_status.difficulty * 2**32 / 600 / 1e18) +"</span>";
                 document.getElementById("difficulty").innerHTML ="Difficulty: <span class='green'>" + btc_status.difficulty + "</span>";
                 document.getElementById("database_size").innerHTML ="Database size: <span class='green'>" + (btc_status.size_on_disk / 1e9) +"GB</span>";
-        })
-    }
-    function meta_pool_get() {
-        fetch(node_url, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({jsonrpc: "2.0", id: 1, method: "getmempoolinfo", params: []})})
-        .then(res => res.json())
-        .then(data => {
+            })
+        }
+        function meta_pool_get() {
+            fetch(node_url, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({jsonrpc: "2.0", id: 1, method: "getmempoolinfo", params: []})})
+            .then(res => res.json())
+            .then(data => {
                 btc_meta = data.result;
                 document.getElementById("meta_pool").innerHTML ="Meta pool (<span class='green'>" + btc_meta.size +"</span>):";
 
-        })
-    }
-    async function pool_get() {
-        try {
-            const container = document.getElementById("pool_show");
-            const res = await fetch(node_url, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({jsonrpc: "2.0", id: 1, method: "getrawmempool", params: [true]})})
-            const data = await res.json();
-            const txs = data.result; 
-            container.innerHTML = "";
-            Object.entries(txs).forEach(([txid, tx])  => {
-                const weight = tx.weight || 1;
-                const side = Math.sqrt(weight) * 0.08;
-                const box = document.createElement("div");
-                box.className = "tx_box";
-                box.style.width = side + "px";
-                box.style.height = side + "px";
-                const intensity = Math.min(255, weight / 50);
-                box.style.background = `rgb(${intensity}, 80, 200)`;
-                container.appendChild(box);
-            });
-        } catch (err) {
-            console.error(err);
+            })
         }
-    }
-    setInterval(status_get, 500);
-    setInterval(meta_pool_get, 500);
-    setInterval(pool_get, 2000);
-</script>
-<div id="height">height</div>
-<div id="last_hash">last_hash</div>
-<div id="hash_rate">hash_rate</div>
-<div id="difficulty">difficulty</div>
-<div id="database_size">database_size</div>
+        async function pool_get() {
+            try {
+                const container = document.getElementById("pool_show");
+                const res = await fetch(node_url, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({jsonrpc: "2.0", id: 1, method: "getrawmempool", params: [true]})})
+                const data = await res.json();
+                const txs = data.result; 
+                container.innerHTML = "";
+                Object.entries(txs).forEach(([txid, tx])  => {
+                    const weight = tx.weight || 1;
+                    const side = Math.sqrt(weight) * 0.08;
+                    const box = document.createElement("div");
+                    box.className = "tx_box";
+                    box.style.width = side + "px";
+                    box.style.height = side + "px";
+                    const intensity = Math.min(255, weight / 50);
+                    box.style.background = `rgb(${intensity}, 80, 200)`;
+                    container.appendChild(box);
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        setInterval(status_get, 500);
+        setInterval(meta_pool_get, 500);
+        setInterval(pool_get, 2000);
+    </script>
+    <div id="height">height</div>
+    <div id="last_hash">last_hash</div>
+    <div id="hash_rate">hash_rate</div>
+    <div id="difficulty">difficulty</div>
+    <div id="database_size">database_size</div>
 
-<div id="meta_pool">meta_pool</div>
-<div id="pool_show"></div>
+    <div id="meta_pool">meta_pool</div>
+    <div id="pool_show"></div>
+</html>

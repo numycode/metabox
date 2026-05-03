@@ -67,7 +67,7 @@
                 txs.sort((a, b) => (b.weight || 1) - (a.weight || 1));
                 txs.forEach((tx) => {
                     const weight = tx.weight || 1;
-                    const side = Math.sqrt(weight) * 0.08;
+                    const side = Math.sqrt(weight) * 0.15;
                     const box = document.createElement("div");
                     box.className = "tx_box";
                     box.style.width = side + "px";

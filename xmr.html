@@ -58,6 +58,7 @@
                 const data = await res.json();
                 const txs = data.transactions || [];
                 container.innerHTML = "";
+                txs.sort((a, b) => (b.weight || 1) - (a.weight || 1));
                 txs.forEach(tx => {
                     const weight = tx.weight || 1;
                     const side = Math.sqrt(weight) * 1;

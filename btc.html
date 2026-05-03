@@ -42,11 +42,11 @@
             .then(res => res.json())
             .then(data => {
                 btc_status = data.result;
-                if (old_hight < status.height) {
+                if (old_hight < btc_status.blocks) {
                     beep.play();
                 }
                 document.getElementById("height").innerHTML = "Height: <span class='green'>" + btc_status.blocks + "</span>";
-                old_hight = status.height;
+                old_hight = btc_status.blocks;
                 document.getElementById("last_hash").innerHTML = "Last block: <span class='green'>" + btc_status.bestblockhash + "</span>";
                 document.getElementById("hash_rate").innerHTML ="Hash Rate (Ph/s): <span class='green'>" + (btc_status.difficulty * 2**32 / 600 / 1e18) +"</span>";
                 document.getElementById("difficulty").innerHTML ="Difficulty: <span class='green'>" + btc_status.difficulty + "</span>";

@@ -61,7 +61,7 @@
                 const container = document.getElementById("pool_show");
                 const res = await fetch(node_url, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({jsonrpc: "2.0", id: 1, method: "getrawmempool", params: [true]})})
                 const data = await res.json();
-                const txs = data.result; 
+                txs = data.result; 
                 container.innerHTML = "";
                 txs.sort((a, b) => (b.weight || 1) - (a.weight || 1));
                 Object.entries(txs).forEach(([txid, tx])  => {

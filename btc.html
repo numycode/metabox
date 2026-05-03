@@ -63,8 +63,9 @@
                 const data = await res.json();
                 txs = data.result; 
                 container.innerHTML = "";
+                txs = Object.values(data.result);
                 txs.sort((a, b) => (b.weight || 1) - (a.weight || 1));
-                Object.entries(txs).forEach(([txid, tx])  => {
+                txs.forEach((tx) => {
                     const weight = tx.weight || 1;
                     const side = Math.sqrt(weight) * 0.08;
                     const box = document.createElement("div");

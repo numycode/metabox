@@ -40,8 +40,10 @@
         let old_total_fee_ratio = 0
         let new_tx_fee_max_ratio = 0
         let old_tx_fee_max_ratio = 0
-        let new_tx_fee_min_ratio = 0
-        let old_tx_fee_min_ratio = 0
+        let new_tx_fee_min_ratio = 100000000
+        let old_tx_fee_min_ratio = 100000000
+        let new_total_size = 0
+        let old_total_size = 0
         old_block_height = 0;
 
         async function status_update() {
@@ -82,20 +84,25 @@
                 document.getElementById("display_tx_pool").innerHTML = "";
                 txs.sort((a, b) => (b.weight || 1) - (a.weight || 1));
                 new_total_fee_ratio = 0
+                new_tx_fee_max_ratio = 0
+                new_tx_fee_min_ratio = 100000000
+                new_total_size = 0
                 txs.forEach(tx => {
                     // CONFIG
+                    const tx_pool_max_b = 648000000
                     const tx_id = tx.id_hash;
                     const tx_weight = tx.weight;
                     const tx_size = tx.blob_size;
                     const tx_fee = tx.fee;
                     
-                    const tx_fee_ratio = tx_fee / tx_size
+                    const tx_fee_ratio = tx_fee / tx_weight
                     if (tx_fee_ratio > new_tx_fee_max_ratio) {new_tx_fee_max_ratio = tx_fee_ratio}
                     if (tx_fee_ratio < new_tx_fee_min_ratio) {new_tx_fee_min_ratio = tx_fee_ratio}
                     new_total_fee_ratio = new_total_fee_ratio + tx_fee_ratio
+                    new_total_size = new_total_size + tx_size
                     const tx_fee_avg_ratio = old_total_fee_ratio / txs.length
 
-                    const side = Math.sqrt(tx_weight) * 1;
+                    const side = Math.sqrt(tx_size) * 1;
                     const box = document.createElement("div");
                     box.className = "tx_box";
                     box.style.width = side + "px";
@@ -107,13 +114,19 @@
                     else {
                         intensity = (tx_fee_ratio - tx_fee_avg_ratio) * 127 / (old_tx_fee_max_ratio  - tx_fee_avg_ratio) + 127
                     }
+                    if (old_tx_fee_min_ratio == old_tx_fee_max_ratio) {
+                        intensity = 0
+                    }
                     box.style.background = `rgb(${intensity}, 80, 200)`;
                     box.textContent = tx_weight;
                     document.getElementById("display_tx_pool").appendChild(box);
+                    document.getElementById("display_fee").innerHTML ="Tx fee: <span class='display_status_color'>" + new_tx_fee_min_ratio.toFixed(2) + " AU/b " + tx_fee_avg_ratio.toFixed(2) + " AU/b " + new_tx_fee_max_ratio.toFixed(2) +" AU/b </span>";
+                    document.getElementById("display_tx_pool_fill").innerHTML = "Size: <span class='display_status_color'>" + old_total_size + "</span>" + " Full: <span class='display_status_color'>" + ((old_total_size / tx_pool_max_b)*100).toFixed(2) + "%";
                 });
                 old_total_fee_ratio = new_total_fee_ratio
                 old_tx_fee_max_ratio  = new_tx_fee_max_ratio
                 old_tx_fee_min_ratio = new_tx_fee_min_ratio 
+                old_total_size = new_total_size
             }
             catch (err) {
                 console.error(err);
@@ -128,6 +141,7 @@
     <div id="display_difficulty">loading... | if stuck here you may have  jave script off, a CORS issue, no internet, a bad node |</div>
     <div id="display_database_size">loading... | if stuck here you may have  jave script off, a CORS issue, no internet, a bad node |</div>
     <div id="display_tx_count">loading... | if stuck here you may have  jave script off, a CORS issue, no internet, a bad node |</div>
-    <div id="display_tx_pool_count">loading... | if stuck here you may have  jave script off, a CORS issue, no internet, a bad node |</div>
+    <div id="display_fee">loading... | if stuck here you may have  jave script off, a CORS issue, no internet, a bad node |</div>
+    <span id="display_tx_pool_count">loading... | if stuck here you may have  jave script off, a CORS issue, no internet, a bad node |</span> <dev id="display_tx_pool_fill"></dev> 
     <div id="display_tx_pool"></div>
 </body>

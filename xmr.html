@@ -102,7 +102,7 @@
                     new_total_size = new_total_size + tx_size
                     const tx_fee_avg_ratio = old_total_fee_ratio / txs.length
 
-                    const side = Math.sqrt(tx_size) * 1;
+                    const side = Math.sqrt(tx_weight) * 1;
                     const box = document.createElement("div");
                     box.className = "tx_box";
                     box.style.width = side + "px";

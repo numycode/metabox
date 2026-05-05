@@ -89,7 +89,7 @@
                 new_total_size = 0
                 txs.forEach(tx => {
                     // CONFIG
-                    const tx_pool_max_b = 648000000
+                    const block_max_weight = 300000
                     const tx_id = tx.id_hash;
                     const tx_weight = tx.weight;
                     const tx_size = tx.blob_size;
@@ -121,7 +121,7 @@
                     box.textContent = tx_weight;
                     document.getElementById("display_tx_pool").appendChild(box);
                     document.getElementById("display_fee").innerHTML ="Tx fee: <span class='display_status_color'>" + new_tx_fee_min_ratio.toFixed(2) + " AU/b " + tx_fee_avg_ratio.toFixed(2) + " AU/b " + new_tx_fee_max_ratio.toFixed(2) +" AU/b </span>";
-                    document.getElementById("display_tx_pool_fill").innerHTML = "Size: <span class='display_status_color'>" + old_total_size + "</span>" + " Full: <span class='display_status_color'>" + ((old_total_size / tx_pool_max_b)*100).toFixed(2) + "%";
+                    document.getElementById("display_tx_pool_fill").innerHTML = "Size: <span class='display_status_color'>" + old_total_size + "</span>" + " Full: <span class='display_status_color'>" + ((old_total_size / block_max_weight)*100).toFixed(2) + "%";
                 });
                 old_total_fee_ratio = new_total_fee_ratio
                 old_tx_fee_max_ratio  = new_tx_fee_max_ratio

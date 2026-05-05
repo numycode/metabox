@@ -30,7 +30,7 @@
     </style>
 </head>
 <body>
-    <input type="text" id="node" value="https://monero.openinternet.io"  style="width:300px;">
+    <input type="text" id="node" value="https://node.monerosafe.com"  style="width:300px;">
     <script>
         node_url = document.getElementById("node").value;
         // sounds
@@ -108,7 +108,7 @@
                         intensity = (tx_fee_ratio - tx_fee_avg_ratio) * 127 / (old_tx_fee_max_ratio  - tx_fee_avg_ratio) + 127
                     }
                     box.style.background = `rgb(${intensity}, 80, 200)`;
-                    box.textContent = tx_fee_ratio;
+                    box.textContent = tx_weight;
                     document.getElementById("display_tx_pool").appendChild(box);
                 });
                 old_total_fee_ratio = new_total_fee_ratio

@@ -103,7 +103,7 @@
                     const tx_id = "";
                     const tx_weight = tx.weight;
                     const tx_size = tx.vsize;
-                    const tx_fee = tx.fees.base;
+                    const tx_fee = tx.fees.base * 100000000;
                     
                     const tx_fee_ratio = tx_fee / tx_size;
                     if (tx_fee_ratio > new_tx_fee_max_ratio) {new_tx_fee_max_ratio = tx_fee_ratio;}

@@ -105,12 +105,12 @@
                     const tx_size = tx.vsize;
                     const tx_fee = tx.fees.base;
                     
-                    const tx_fee_ratio = tx_fee / tx_weight
-                    if (tx_fee_ratio > new_tx_fee_max_ratio) {new_tx_fee_max_ratio = tx_fee_ratio}
-                    if (tx_fee_ratio < new_tx_fee_min_ratio) {new_tx_fee_min_ratio = tx_fee_ratio}
-                    new_total_fee_ratio = new_total_fee_ratio + tx_fee_ratio
-                    new_total_size = new_total_size + tx_size
-                    const tx_fee_avg_ratio = old_total_fee_ratio / txs.length
+                    const tx_fee_ratio = tx_fee / tx_size;
+                    if (tx_fee_ratio > new_tx_fee_max_ratio) {new_tx_fee_max_ratio = tx_fee_ratio;}
+                    if (tx_fee_ratio < new_tx_fee_min_ratio) {new_tx_fee_min_ratio = tx_fee_ratio;}
+                    new_total_fee_ratio = new_total_fee_ratio + tx_fee_ratio;
+                    new_total_size = new_total_size + tx_size;
+                    const tx_fee_avg_ratio = old_total_fee_ratio / txs.length;
 
                     const side = Math.sqrt(tx_weight) * 0.15;
                     const box = document.createElement("div");
@@ -119,13 +119,13 @@
                     box.style.height = side + "px";
                     let intensity = 0
                     if (tx_fee_ratio < tx_fee_avg_ratio) {
-                        intensity = (tx_fee_ratio - old_tx_fee_min_ratio) * 127 / (tx_fee_avg_ratio - old_tx_fee_min_ratio) 
+                        intensity = (tx_fee_ratio - old_tx_fee_min_ratio) * 127 / (tx_fee_avg_ratio - old_tx_fee_min_ratio);
                     }
                     else {
-                        intensity = (tx_fee_ratio - tx_fee_avg_ratio) * 127 / (old_tx_fee_max_ratio  - tx_fee_avg_ratio) + 127
+                        intensity = (tx_fee_ratio - tx_fee_avg_ratio) * 127 / (old_tx_fee_max_ratio  - tx_fee_avg_ratio) + 127;
                     }
                     if (old_tx_fee_min_ratio == old_tx_fee_max_ratio) {
-                        intensity = 0
+                        intensity = 0;
                     }
                     box.style.background = `rgb(${intensity}, 80, 200)`;
                     if (tx_weight > 75000) {
@@ -135,10 +135,10 @@
                     document.getElementById("display_fee").innerHTML ="Tx fee: <span class='display_status_color'>" + new_tx_fee_min_ratio.toFixed(2) + " AU/b " + tx_fee_avg_ratio.toFixed(2) + " AU/b " + new_tx_fee_max_ratio.toFixed(2) +" AU/b </span>";
                     document.getElementById("display_tx_pool_fill").innerHTML = "Size: <span class='display_status_color'>" + old_total_size + "</span>" + " Full blocks: <span class='display_status_color'>" + ((old_total_size / block_max_weight)*100).toFixed(2) + "%";
                 });
-                old_total_fee_ratio = new_total_fee_ratio
-                old_tx_fee_max_ratio  = new_tx_fee_max_ratio
-                old_tx_fee_min_ratio = new_tx_fee_min_ratio 
-                old_total_size = new_total_size
+                old_total_fee_ratio = new_total_fee_ratio;
+                old_tx_fee_max_ratio  = new_tx_fee_max_ratio;
+                old_tx_fee_min_ratio = new_tx_fee_min_ratio;
+                old_total_size = new_total_size;
             }
             catch (err) {
                 console.error(err);

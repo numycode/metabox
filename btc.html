@@ -32,6 +32,7 @@
 <body>
     <input type="text" id="node" value="https://bitcoin-rpc.publicnode.com"  style="width:300px;">
     <script>
+        console.log("Metabox V1.0 BTC")
         node_url = document.getElementById("node").value;
         // sounds
         var audio_1 = new Audio("data:audio/mpeg;base64,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");
@@ -57,6 +58,7 @@
         }
         async function status_update() {
             try {
+                node_url = document.getElementById("node").value;
                 status = (await (await fetch(node_url, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({jsonrpc: "2.0", id: 1, method: "getblockchaininfo", params: []}) })).json()).result;
                 txstats = (await (await fetch(node_url, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({jsonrpc: "2.0", id: 1, method: "getchaintxstats", params: []}) })).json()).result;
                 mstats = (await (await fetch(node_url, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({jsonrpc: "2.0", id: 1, method: "getmempoolinfo", params: []}) })).json()).result;
@@ -94,10 +96,10 @@
                 let txs = Object.values(pool);
                 document.getElementById("display_tx_pool").innerHTML = "";
                 txs.sort((a, b) => (b.weight || 1) - (a.weight || 1));
-                new_total_fee_ratio = 0
-                new_tx_fee_max_ratio = 0
-                new_tx_fee_min_ratio = 100000000
-                new_total_size = 0
+                new_total_fee_ratio = 0;
+                new_tx_fee_max_ratio = 0;
+                new_tx_fee_min_ratio = 100000000;
+                new_total_size = 0;
                 txs.forEach(tx => {
                     // CONFIG
                     const tx_id = "";
@@ -105,11 +107,11 @@
                     const tx_size = tx.vsize;
                     const tx_fee = tx.fees.base * 100000000;
                     
-                    const tx_fee_ratio = tx_fee / tx_size;
-                    if (tx_fee_ratio > new_tx_fee_max_ratio) {new_tx_fee_max_ratio = tx_fee_ratio;}
-                    if (tx_fee_ratio < new_tx_fee_min_ratio) {new_tx_fee_min_ratio = tx_fee_ratio;}
-                    new_total_fee_ratio = new_total_fee_ratio + tx_fee_ratio;
-                    new_total_size = new_total_size + tx_size;
+                    const tx_fee_ratio = tx_fee / tx_weight;
+                    if (tx_fee_ratio > new_tx_fee_max_ratio) {new_tx_fee_max_ratio = tx_fee_ratio}
+                    if (tx_fee_ratio < new_tx_fee_min_ratio) {new_tx_fee_min_ratio = tx_fee_ratio}
+                    new_total_fee_ratio = new_total_fee_ratio + tx_fee_ratio
+                    new_total_size = new_total_size + tx_size
                     const tx_fee_avg_ratio = old_total_fee_ratio / txs.length;
 
                     const side = Math.sqrt(tx_weight) * 0.15;
@@ -117,7 +119,7 @@
                     box.className = "tx_box";
                     box.style.width = side + "px";
                     box.style.height = side + "px";
-                    let intensity = 0
+                    let intensity = 0;
                     if (tx_fee_ratio < tx_fee_avg_ratio) {
                         intensity = (tx_fee_ratio - old_tx_fee_min_ratio) * 127 / (tx_fee_avg_ratio - old_tx_fee_min_ratio);
                     }
@@ -145,7 +147,7 @@
             }
         }
         setInterval(status_update, 500);
-        setInterval(tx_pool_update, 2000);
+        setInterval(tx_pool_update, 5000);
     </script>
     <div id="display_height">Loading... | If you are stuck here, you may have javascript off, a CORS issue, no internet, or a bad node |</div>
     <div id="display_last_block_hash">Loading... | If you are stuck here, you may have javascript off, a CORS issue, no internet, or a bad node |</div>
